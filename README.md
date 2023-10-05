@@ -6,7 +6,7 @@ For using it, install rust, then build it with cargo build --release.
 
 For linux :
 
-./target/release/BananoQR <AMOUNT> <ADDRESS> <FILENAME>
+./target/release/BananoQR AMOUNT(raw) ADDRESS FILENAME
 
 For Windows :
 
