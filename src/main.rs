@@ -1,10 +1,12 @@
 use clap::Parser;
-extern crate qrcode;
 extern crate image;
+extern crate qrcode;
 
+use image::{
+    imageops::{overlay, resize},
+    DynamicImage, GenericImageView, Rgba, RgbaImage,
+};
 use qrcode::QrCode;
-use image::{DynamicImage, Rgba, RgbaImage, GenericImageView, imageops::{resize, overlay}};
-
 
 fn generate_qr_code(data: &str) -> DynamicImage {
     // Generate the QR code
@@ -20,13 +22,17 @@ fn load_logo(logo_path: &str) -> RgbaImage {
     image::open(logo_path)
         .expect("Failed to load logo image")
         .to_rgba8()
-   
 }
 
 fn overlay_logo(qr_code: &DynamicImage, logo: &RgbaImage) -> DynamicImage {
     // Scale the logo to fit within the dimensions of the QR code
     let (qr_width, qr_height) = qr_code.dimensions();
-    let logo = resize(logo, qr_width / 3, qr_height / 4, image::imageops::FilterType::Lanczos3);
+    let logo = resize(
+        logo,
+        qr_width / 3,
+        qr_height / 4,
+        image::imageops::FilterType::Lanczos3,
+    );
 
     // Create a copy of the QR code image
     let mut combined_image = qr_code.clone();
@@ -53,7 +59,7 @@ struct BananoQR {
     filename: String,
 }
 
- fn main() {
+fn main() {
     let args = BananoQR::parse();
 
     let address = args.address;
@@ -68,5 +74,4 @@ struct BananoQR {
     let logo = load_logo(logo_path);
     let qr_code_with_logo = overlay_logo(&qr_code, &logo);
     save_qr_code_with_logo(&qr_code_with_logo, &output_path);
-
 }
