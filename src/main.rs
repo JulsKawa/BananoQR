@@ -24,6 +24,14 @@ fn load_logo(logo_path: &str) -> RgbaImage {
         .to_rgba8()
 }
 
+fn fetch_logo_from_url(url: &str) -> RgbaImage {
+    let response = reqwest::blocking::get(url).expect("Failed to fetch logo image");
+    let bytes = response.bytes().expect("Failed to read logo image bytes");
+    let image = image::load_from_memory(&bytes).expect("Failed to load logo image from bytes");
+
+    image.to_rgba8()
+}
+
 fn overlay_logo(qr_code: &DynamicImage, logo: &RgbaImage) -> DynamicImage {
     // Scale the logo to fit within the dimensions of the QR code
     let (qr_width, qr_height) = qr_code.dimensions();
@@ -57,6 +65,7 @@ struct BananoQR {
     amount: f64,
     address: String,
     filename: String,
+    model: i8,
 }
 
 fn main() {
@@ -66,12 +75,21 @@ fn main() {
     let amount = args.amount;
     let filename = args.filename;
 
-    let data = format!("ban:{address}?amount={amount}"); // Replace with your QR code data
-    let logo_path = "logo.png"; // Replace with the path to your logo image
-    let output_path = format!("{filename}.png"); // Replace with the desired output path
+    let data = format!("ban:{address}?amount={amount}"); 
+    let logo_path = "logo.png"; 
+    let output_path = format!("{filename}.png"); 
 
-    let qr_code = generate_qr_code(&data);
-    let logo = load_logo(logo_path);
-    let qr_code_with_logo = overlay_logo(&qr_code, &logo);
-    save_qr_code_with_logo(&qr_code_with_logo, &output_path);
-}
+    if args.model == 0 {
+        let qr_code = generate_qr_code(&data);
+        let logo = load_logo(logo_path);
+        let qr_code_with_logo = overlay_logo(&qr_code, &logo);
+        save_qr_code_with_logo(&qr_code_with_logo, &output_path);
+    } else if args.model == 1 {
+        let qr_code = generate_qr_code(&data);
+        let logo = fetch_logo_from_url(&format!("https://monkey.banano.cc/api/v1/monkey/{address}?format=png&size=100&background=false"));
+        let qr_code_with_logo = overlay_logo(&qr_code, &logo);
+        save_qr_code_with_logo(&qr_code_with_logo, &output_path);
+    } 
+    }
+
+    

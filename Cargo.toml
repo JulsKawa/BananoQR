@@ -11,3 +11,4 @@ qrcode = "0.12.0"
 image = "0.23.14"
 imageproc = "0.23"
 qrcode-generator = "4.1.9"
+reqwest = { version = "0.11.22", features = ["blocking"] }
