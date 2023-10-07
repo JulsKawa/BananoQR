@@ -2,4 +2,7 @@
 
 Implementation of a Banano QR Generator ! 
 
-For using it, install rust, and cargo run 
+Usage: BananoQR <AMOUNT> <ADDRESS> <FILENAME> <MODEL>
+
+Model 0 : banano logo
+Model 1 : The monkey of your address
