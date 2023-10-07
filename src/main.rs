@@ -75,9 +75,9 @@ fn main() {
     let amount = args.amount;
     let filename = args.filename;
 
-    let data = format!("ban:{address}?amount={amount}"); 
-    let logo_path = "logo.png"; 
-    let output_path = format!("{filename}.png"); 
+    let data = format!("ban:{address}?amount={amount}");
+    let logo_path = "logo.png";
+    let output_path = format!("{filename}.png");
 
     if args.model == 0 {
         let qr_code = generate_qr_code(&data);
@@ -86,10 +86,10 @@ fn main() {
         save_qr_code_with_logo(&qr_code_with_logo, &output_path);
     } else if args.model == 1 {
         let qr_code = generate_qr_code(&data);
-        let logo = fetch_logo_from_url(&format!("https://monkey.banano.cc/api/v1/monkey/{address}?format=png&size=100&background=false"));
+        let logo = fetch_logo_from_url(&format!(
+            "https://monkey.banano.cc/api/v1/monkey/{address}?format=png&size=100&background=false"
+        ));
         let qr_code_with_logo = overlay_logo(&qr_code, &logo);
         save_qr_code_with_logo(&qr_code_with_logo, &output_path);
-    } 
     }
-
-    
+}
