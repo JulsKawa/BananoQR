@@ -35,10 +35,14 @@ fn fetch_logo_from_url(url: &str) -> RgbaImage {
 fn overlay_logo(qr_code: &DynamicImage, logo: &RgbaImage) -> DynamicImage {
     // Scale the logo to fit within the dimensions of the QR code
     let (qr_width, qr_height) = qr_code.dimensions();
+    let (logo_width, logo_height) = logo.dimensions();
+
+    let logo_resized_width = (qr_width * 2) / 5;
+    let logo_resized_height = (logo_height * logo_resized_width) / logo_width;
     let logo = resize(
         logo,
-        qr_width / 3,
-        qr_height / 4,
+        logo_resized_width,
+        logo_resized_height,
         image::imageops::FilterType::Lanczos3,
     );
 
@@ -46,8 +50,8 @@ fn overlay_logo(qr_code: &DynamicImage, logo: &RgbaImage) -> DynamicImage {
     let mut combined_image = qr_code.clone();
 
     // Calculate the position to center the logo on the QR code
-    let x_offset = (qr_width - logo.width()) / 2;
-    let y_offset = (qr_height - logo.height()) / 2;
+    let x_offset = (qr_width - logo_resized_width) / 2;
+    let y_offset = (qr_height - logo_resized_height) / 2;
 
     // Overlay the logo on top of the QR code
     overlay(&mut combined_image, &logo, x_offset, y_offset);
