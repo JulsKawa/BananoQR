@@ -95,5 +95,8 @@ fn main() {
         ));
         let qr_code_with_logo = overlay_logo(&qr_code, &logo);
         save_qr_code_with_logo(&qr_code_with_logo, &output_path);
+    } else if args.model == 2 {
+        let qr_code = generate_qr_code(&data);
+        save_qr_code_with_logo(&qr_code, &output_path);
     }
 }

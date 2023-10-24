@@ -6,3 +6,4 @@ Usage: BananoQR AMOUNT ADDRESS FILENAME MODEL
 
 Model 0 : banano logo
 Model 1 : The monkey of your address
+Model 2 : Basic QR Code
